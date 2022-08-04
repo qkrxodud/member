@@ -1,0 +1,63 @@
+package able.member.ApiController;
+
+import able.member.dto.UserLoginResponseDto;
+import able.member.entity.User;
+import able.member.security.JwtProvider;
+import able.member.service.SignService;
+import able.member.service.UserService;
+import able.member.utils.ResponseMessage;
+import io.swagger.annotations.Api;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Collections;
+
+import static able.member.utils.DefaultRes.createDefaultRes;
+
+@Api(tags = "SignUp / LogIn")
+@RestController
+@RequiredArgsConstructor
+public class SignController {
+
+    private final SignService signService;
+    private final JwtProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
+
+    @GetMapping("/login")
+    public ResponseEntity login(@RequestParam String email, @RequestParam String password) {
+        User loginUser = signService.login(email, password);
+        String token = jwtProvider.createToken(String.valueOf(loginUser.getUserNo()), loginUser.getRoles());
+
+        UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto(loginUser, token);
+
+        return new ResponseEntity<>(createDefaultRes(ResponseMessage.OK,
+                "SUCCESS", userLoginResponseDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/signup")
+    public User saveUser(@RequestBody @Valid CreateUserRequest request) {
+        User user = User.builder()
+                .mail(request.mail)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .nickName(request.nickName)
+                .name(request.name)
+                .roles(Collections.singletonList("ROLE_USER"))
+                .phoneNumber(request.phoneNumber).build();
+
+        return signService.join(user);
+    }
+
+    @Data
+    static class CreateUserRequest {
+        private String mail;
+        private String password;
+        private String nickName;
+        private String name;
+        private String phoneNumber;
+    }
+}
