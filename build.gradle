@@ -35,6 +35,11 @@ dependencies {
 	//https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+	//cool sms
+	// https://mvnrepository.com/artifact/net.nurigo/javaSDK
+	implementation 'net.nurigo:sdk:4.2.4'
+
 }
 
 tasks.named('test') {
