@@ -1,6 +1,6 @@
 package able.member.service;
 
-import able.member.entity.ConfirmLog;
+import able.member.entity.MessageLog;
 import lombok.Setter;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
@@ -17,7 +17,7 @@ public class MessageService {
         this.messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
     }
 
-    public SingleMessageSentResponse sendMessage(ConfirmLog authorization) {
+    public SingleMessageSentResponse sendMessage(MessageLog authorization) {
 
         SingleMessageSentResponse response = null;
         Message message = new Message();

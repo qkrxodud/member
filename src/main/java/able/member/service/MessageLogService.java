@@ -1,7 +1,7 @@
 package able.member.service;
 
-import able.member.entity.ConfirmLog;
-import able.member.repository.ConfirmLogRepository;
+import able.member.entity.MessageLog;
+import able.member.repository.MessageLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +11,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MessageDataService {
-    private final ConfirmLogRepository authorizationRepository;
+public class MessageLogService {
+    private final MessageLogRepository messageLogRepository;
 
-    public ConfirmLog addAuthorization(ConfirmLog authorization) {
-        return authorizationRepository.save(authorization);
+    public MessageLog addMessageLog(MessageLog authorization) {
+        return messageLogRepository.save(authorization);
     }
 
-    public void checkSmsDateTime(ConfirmLog authorization) {
+    public void checkSmsDateTime(MessageLog authorization) {
         LocalDateTime nowDateTime = LocalDateTime.now();
         LocalDateTime authorizationDateTime = authorization.getRegDate();
 
@@ -28,13 +28,13 @@ public class MessageDataService {
     }
 
     public void checkSmsCount(String phoneNumber) {
-        Optional<Integer> count = authorizationRepository.findCountAuthorization(phoneNumber);
+        Optional<Integer> count = messageLogRepository.countMessageLogByPhoneNumber(phoneNumber);
         if (count.get()>9) {
             throw new IllegalStateException("하루 한도 10회 인증을 초과하였습니다.");
         }
     }
 
-    public Optional<ConfirmLog> findTop1ByAuthorization(String phoneNumber) {
-        return authorizationRepository.findTop1ByAuthorization(phoneNumber);
+    public Optional<MessageLog> searchTop1ByPhoneNumber(String phoneNumber) {
+        return messageLogRepository.searchTop1ByPhoneNumber(phoneNumber);
     }
 }

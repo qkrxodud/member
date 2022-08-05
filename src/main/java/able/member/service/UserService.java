@@ -1,6 +1,5 @@
 package able.member.service;
 
-import able.member.dto.UserLoginResponseDto;
 import able.member.entity.User;
 import able.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

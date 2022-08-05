@@ -43,6 +43,9 @@ public class SignController {
 
     @PostMapping("/signup")
     public User saveUser(@RequestBody @Valid CreateUserRequest request) {
+        
+
+
         //TODO 함수로 빼자.
         boolean matches = Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", request.getPassword());
         System.out.println(matches);

@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests(authorize -> authorize.antMatchers("/login", "/signup", "/send-message").permitAll().anyRequest().hasRole("USER"))
+                .authorizeRequests(authorize -> authorize.antMatchers("/login", "/signup", "/send-message", "/check-message").permitAll().anyRequest().hasRole("USER"))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

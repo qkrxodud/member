@@ -1,7 +1,10 @@
 package able.member.apiController;
 
-import able.member.entity.ConfirmLog;
-import able.member.service.MessageDataService;
+import able.member.entity.Authorization;
+import able.member.entity.MessageLog;
+import able.member.entity.StatusValue;
+import able.member.service.AuthorizationService;
+import able.member.service.MessageLogService;
 import able.member.service.MessageService;
 import able.member.utils.ResponseMessage;
 import able.member.utils.Util;
@@ -22,7 +25,9 @@ import static able.member.utils.DefaultRes.createDefaultRes;
 @RestController
 @RequiredArgsConstructor
 public class MessageController {
-    private final MessageDataService messageDataService;
+
+    private final MessageLogService messageLogService;
+    private final AuthorizationService authorizationService;
 
     @Value("${message.apiKey}")
     private String apiKey;
@@ -30,29 +35,53 @@ public class MessageController {
     @Value("${message.secret}")
     private String apiSecret;
 
+    // 메세지 전송
     @GetMapping("/send-message")
     public ResponseEntity sendMessage(@RequestParam String phoneNumber) {
-        Optional<ConfirmLog> top1ByAuthorization = messageDataService.findTop1ByAuthorization(phoneNumber);
+        Optional<MessageLog> top1ByAuthorization = messageLogService.searchTop1ByPhoneNumber(phoneNumber);
         if (!top1ByAuthorization.isEmpty()) {
             // 하루 전송량 10회
-            messageDataService.checkSmsCount(phoneNumber);
+            messageLogService.checkSmsCount(phoneNumber);
             // 3분 이내에 시간 체크
-            messageDataService.checkSmsDateTime(top1ByAuthorization.get());
+            messageLogService.checkSmsDateTime(top1ByAuthorization.get());
         }
-
         //난수 생성
         String randomNum = Util.createRandomNum();
 
-        ConfirmLog authorization = ConfirmLog.builder()
+        //회원 인증
+        if (!authorizationService.existsByPhoneNumber(phoneNumber)) {
+            Authorization authorization = Authorization.builder()
+                    .phoneNumber(phoneNumber)
+                    .phoneCheck(StatusValue.N)
+                    .build();
+
+            authorizationService.addAuthorization(authorization);
+        }
+
+        //메세지 로그
+        MessageLog messageLog = MessageLog.builder()
                 .phoneNumber(phoneNumber)
                 .random(randomNum)
                 .regDate(LocalDateTime.now())
                 .build();
-        messageDataService.addAuthorization(authorization);
+        messageLogService.addMessageLog(messageLog);
 
+        //메세지 전송
         MessageService messageService = new MessageService(apiKey, apiSecret);
-        SingleMessageSentResponse singleMessageSentResponse = messageService.sendMessage(authorization);
+        SingleMessageSentResponse singleMessageSentResponse = messageService.sendMessage(messageLog);
 
         return new ResponseEntity<>(createDefaultRes(ResponseMessage.OK, "SUCCESS", singleMessageSentResponse.getStatusMessage()), HttpStatus.OK);
+    }
+
+    // 메세지 확인
+    @GetMapping("/check-message")
+    public ResponseEntity checkMessage(@RequestParam String phoneNum, @RequestParam String randomNum) {
+        MessageLog messageLog = messageLogService.searchTop1ByPhoneNumber(phoneNum)
+                .orElseThrow(() -> new IllegalStateException("메세지가 발송되지 않았습니다. 잠시기다려주세요."));
+        System.out.println(messageLog.getRandom());
+
+        Boolean result = authorizationService.checkRandomNumber(phoneNum, messageLog.getRandom(), randomNum);
+
+        return new ResponseEntity<>(createDefaultRes(ResponseMessage.OK, "SUCCESS", result), HttpStatus.OK);
     }
 }
