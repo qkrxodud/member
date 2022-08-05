@@ -1,4 +1,4 @@
-package able.member.ApiController;
+package able.member.apiController;
 
 import able.member.dto.UserLoginResponseDto;
 import able.member.entity.User;

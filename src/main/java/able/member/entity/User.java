@@ -52,6 +52,7 @@ public class User implements UserDetails {
     @NotBlank(message = "핸드폰 번호는 필수 입력 값입니다.")
     private String phoneNumber;
 
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();

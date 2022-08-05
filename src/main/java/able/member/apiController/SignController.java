@@ -1,17 +1,15 @@
-package able.member.ApiController;
+package able.member.apiController;
 
 import able.member.dto.UserLoginResponseDto;
 import able.member.entity.User;
 import able.member.security.JwtProvider;
 import able.member.service.MessageService;
 import able.member.service.SignService;
-import able.member.service.UserService;
 import able.member.utils.ResponseMessage;
 import io.swagger.annotations.Api;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,12 +27,6 @@ import static able.member.utils.DefaultRes.createDefaultRes;
 @RequiredArgsConstructor
 public class SignController {
 
-    @Value("${message.apiKey}")
-    private String apiKey;
-
-    @Value("${message.secret}")
-    private String apiSecret;
-
     private final SignService signService;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
@@ -49,25 +41,8 @@ public class SignController {
         return new ResponseEntity<>(createDefaultRes(ResponseMessage.OK, "SUCCESS", userLoginResponseDto), HttpStatus.OK);
     }
 
-    @GetMapping("/send-message")
-    public ResponseEntity sendMessage(@RequestParam String phoneNumber) {
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-
-        for (int i=0; i<6; i++) {
-            int createNum = random.nextInt(9);		//0부터 9까지 올 수 있는 1자리 난수 생성
-            sb.append(createNum);
-        }
-
-        MessageService messageService = new MessageService(apiKey, apiSecret);
-        SingleMessageSentResponse singleMessageSentResponse = messageService.sendMessage(phoneNumber, sb.toString());
-        sb.setLength(0);
-        return new ResponseEntity<>(createDefaultRes(ResponseMessage.OK, "SUCCESS", singleMessageSentResponse.getStatusMessage()), HttpStatus.OK);
-    }
-
     @PostMapping("/signup")
     public User saveUser(@RequestBody @Valid CreateUserRequest request) {
-
         //TODO 함수로 빼자.
         boolean matches = Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", request.getPassword());
         System.out.println(matches);
