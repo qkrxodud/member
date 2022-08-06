@@ -1,10 +1,11 @@
 package able.member.apiController;
 
+import able.member.dto.AuthorStatusResponseDto;
 import able.member.dto.UserLoginResponseDto;
 import able.member.entity.Authorization;
 import able.member.entity.StatusValue;
 import able.member.entity.User;
-import able.member.exhandler.exception.CUserNotFoundException;
+import able.member.exhandler.exception.CAuthorizationNotFoundException;
 import able.member.model.response.SingleResult;
 import able.member.security.JwtProvider;
 import able.member.service.AuthorizationService;
@@ -36,27 +37,25 @@ public class SignController {
     public SingleResult<UserLoginResponseDto> loginEmail(@RequestParam String email, @RequestParam String password) {
         User loginUser = signService.loginEmail(email, password);
         String token = jwtProvider.createToken(String.valueOf(loginUser.getUserNo()), loginUser.getRoles());
-        UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto(loginUser, token);
 
-        return responseService.getSingleResult(userLoginResponseDto);
+        return responseService.getSingleResult(new UserLoginResponseDto(loginUser, token));
     }
 
     @GetMapping("/login-phone")
     public SingleResult<UserLoginResponseDto> loginPhone(@RequestParam String phone, @RequestParam String password) {
         User loginUser = signService.loginPhone(phone, password);
         String token = jwtProvider.createToken(String.valueOf(loginUser.getUserNo()), loginUser.getRoles());
-        UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto(loginUser, token);
 
-        return responseService.getSingleResult(userLoginResponseDto);
+        return responseService.getSingleResult(new UserLoginResponseDto(loginUser, token));
     }
 
     @PostMapping("/signup")
-    public SingleResult<User> saveUser(@RequestBody @Valid CreateUserRequest request) {
+    public SingleResult<UserLoginResponseDto> saveUser(@RequestBody @Valid CreateUserRequest request) {
         // TODO 주석 열어줘야된다.
         Authorization authorization = authorizationService.findByPhoneNumber(request.getPhoneNumber());
 
         if (authorization.getPhoneCheck() == StatusValue.N) {
-            throw new IllegalArgumentException("핸드폰 인증 후 회원가입바랍니다.");
+            throw new CAuthorizationNotFoundException();
         }
 
         //TODO 함수로 빼자.
@@ -73,18 +72,21 @@ public class SignController {
                 .roles(Collections.singletonList("ROLE_USER"))
                 .phoneNumber(request.phoneNumber).build();
 
-        return responseService.getSingleResult(signService.join(user));
+        User joinUser = signService.join(user);
+        String token = jwtProvider.createToken(String.valueOf(joinUser.getUserNo()), joinUser.getRoles());
+
+        return responseService.getSingleResult(new UserLoginResponseDto(joinUser, token));
     }
 
     @PutMapping("/user")
-    public SingleResult<Authorization> update(@RequestParam String phone, @RequestParam String password) {
+    public SingleResult<AuthorStatusResponseDto> update(@RequestParam String phone, @RequestParam String password) {
         Authorization authorization = authorizationService.findByPhoneNumber(phone);
 
         if (authorization.getPhoneCheck() == StatusValue.Y) {
             signService.update(phone, password);
         }
 
-        return responseService.getSingleResult(authorization);
+        return responseService.getSingleResult(new AuthorStatusResponseDto(authorization));
     }
 
     @Data

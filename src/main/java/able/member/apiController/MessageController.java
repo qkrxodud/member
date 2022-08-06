@@ -1,5 +1,6 @@
 package able.member.apiController;
 
+import able.member.dto.MessageResponseDto;
 import able.member.entity.Authorization;
 import able.member.entity.MessageLog;
 import able.member.entity.StatusValue;
@@ -14,6 +15,7 @@ import able.member.service.ResponseService;
 import able.member.utils.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +42,7 @@ public class MessageController {
 
     // 메세지 전송
     @GetMapping("/send-message")
-    public SingleResult<String> sendMessage(@RequestParam String phoneNumber) {
+    public SingleResult<MessageResponseDto> sendMessage(@RequestParam String phoneNumber) {
         Optional<MessageLog> top1ByAuthorization = messageLogService.searchTop1ByPhoneNumber(phoneNumber);
 
         //유호성 값 체크
@@ -68,26 +70,33 @@ public class MessageController {
 
         //메세지 전송
         String statusMessage = new MessageService(apiKey, apiSecret).sendMessage(messageLog).getStatusMessage();
+
         return responseService
-                .getSingleResult(statusMessage);
+                .getSingleResult(new MessageResponseDto(phoneNumber, statusMessage));
     }
 
     // 메세지 확인
     @PutMapping("/check-message")
-    public SingleResult<Boolean> checkMessage(@RequestParam String phoneNum, @RequestParam String randomNum) {
+    public SingleResult<MessageResponseDto> checkMessage(@RequestParam String phoneNum, @RequestParam String randomNum) {
         MessageLog messageLog = messageLogService.searchTop1ByPhoneNumber(phoneNum)
                 .orElseThrow(CMessageCheckFailedException::new);
 
         authorizationService.findByPhoneNumber(phoneNum);
+        Boolean checkAuth = authorizationService.checkRandomNumber(phoneNum, messageLog.getRandom(), randomNum);
+        HttpStatus result;
+        if (checkAuth) {
+            result = HttpStatus.OK;
+        } else {
+            result = HttpStatus.PRECONDITION_FAILED;
+        }
 
-        return responseService.getSingleResult(authorizationService.checkRandomNumber(phoneNum, messageLog.getRandom(), randomNum));
+        return responseService.getSingleResult(new MessageResponseDto(phoneNum, result.toString()));
     }
 
     // 업데이트 메시지
     @PutMapping("/update-message")
-    public SingleResult<String> update(@RequestParam String phone) {
+    public SingleResult<MessageResponseDto> update(@RequestParam String phone) {
         authorizationService.initAuthorization(phone);
-
         authorizationService.findByPhoneNumber(phone);
 
         return sendMessage(phone);

@@ -4,24 +4,24 @@ import able.member.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Getter
-public class UserLoginResponseDto {
-    private final Long userNo;
+public class UserDtoResponse {
+    private final String mail;
+    private final String nickName;
+    private final String name;
+    private final String phoneNum;
     private final List<String> roles;
-    private final LocalDateTime createDateTime;
     private final Collection<? extends GrantedAuthority> authorities;
-    private final String token;
 
-
-    public UserLoginResponseDto(User user, String token) {
-        this.userNo = user.getUserNo();
+    public UserDtoResponse(User user) {
+        this.mail = user.getMail();
+        this.nickName = user.getNickName();
+        this.name = user.getName();
+        this.phoneNum = user.getPhoneNumber();
         this.roles = user.getRoles();
-        this.createDateTime = LocalDateTime.now();
         this.authorities = user.getAuthorities();
-        this.token = token;
     }
 }

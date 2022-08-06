@@ -1,5 +1,6 @@
 package able.member.apiController;
 
+import able.member.dto.UserDtoResponse;
 import able.member.entity.User;
 import able.member.model.response.SingleResult;
 import able.member.service.ResponseService;
@@ -33,9 +34,9 @@ public class UserController {
     })
     @ApiOperation(value = "회원 검색 (메일)", notes = "이메일로 회원을 검색합니다.")
     @GetMapping("/api/findUser/{mail}")
-    public SingleResult<User> findUserByMail(@PathVariable String mail) {
+    public SingleResult<UserDtoResponse> findUserByMail(@PathVariable String mail) {
         User userByMail = userService.findUserByMail(mail);
-        return responseService.getSingleResult(userByMail);
+        return responseService.getSingleResult(new UserDtoResponse(userByMail));
     }
 
 }
