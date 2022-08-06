@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @Api(tags = "User")
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +30,7 @@ public class UserController {
                     required = true, dataType = "String", paramType = "header"
             )
     })
+
     @ApiOperation(value = "회원 검색 (메일)", notes = "이메일로 회원을 검색합니다.")
     @GetMapping("/api/findUser/{mail}")
     public SingleResult<UserDtoResponse> findUserByMail(@PathVariable String mail) {

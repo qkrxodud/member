@@ -1,7 +1,9 @@
 package able.member.service;
 
 import able.member.entity.MessageLog;
+import able.member.exhandler.exception.CMessageSendCountOverException;
 import able.member.exhandler.exception.CMessageSendFailedException;
+import able.member.exhandler.exception.CMessageSendTimeOverException;
 import able.member.repository.MessageLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,15 +32,15 @@ public class MessageLogService {
         LocalDateTime nowDateTime = LocalDateTime.now();
         LocalDateTime authorizationDateTime = authorization.getRegDate();
 
-        if (ChronoUnit.MINUTES.between(authorizationDateTime, nowDateTime) < 3) {
-            throw new CMessageSendFailedException();
+        if (ChronoUnit.MINUTES.between(authorizationDateTime, nowDateTime) < 2) {
+            throw new CMessageSendTimeOverException();
         }
     }
 
     public void checkSmsCount(String phoneNumber) {
         Optional<Integer> count = messageLogRepository.countMessageLogByPhoneNumber(phoneNumber);
         if (count.get()>9) {
-            throw new CMessageSendFailedException();
+            throw new CMessageSendCountOverException();
         }
     }
 

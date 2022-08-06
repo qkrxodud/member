@@ -36,7 +36,7 @@ public class ExControllerAdvice {
     @ExceptionHandler(CAuthorizationNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult authenticationNotFoundException() {
-        return responseService.getFailResult(Integer.parseInt("-1000"), "핸드폰 인증을 진행해주세요.");
+        return responseService.getFailResult(Integer.parseInt("-1000"), "등록된 회원이 없습니다. 핸드폰 인증을 진행해주세요.");
     }
 
     @ExceptionHandler(CAuthenticationEntryPointException.class)
@@ -61,6 +61,18 @@ public class ExControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult messageSendFailedException(Exception e) {
         return responseService.getFailResult(Integer.parseInt("-1003"), "메세지 보내는데 실패하였습니다.");
+    }
+
+    @ExceptionHandler(CMessageSendTimeOverException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public CommonResult messageSendTimeOverException(Exception e) {
+        return responseService.getFailResult(Integer.parseInt("-1004"), "메세지는 2분후 재전송 가능합니다.");
+    }
+
+    @ExceptionHandler(CMessageSendCountOverException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public CommonResult messageSendCountOverException(Exception e) {
+        return responseService.getFailResult(Integer.parseInt("-1004"), "하루 메세지는 10개 미만으로 전송 가능합니다.");
     }
 
     @ExceptionHandler(CUserNotFoundException.class)

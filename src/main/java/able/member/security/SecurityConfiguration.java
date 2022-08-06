@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/login-email", "/login-phone", "/signup","/send-message", "/user", "/check-message").permitAll()
+                    .antMatchers("/login-email", "/login-phone", "/signup","/send-message", "/user", "/check-message", "/update-message").permitAll()
                     .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
                     .anyRequest().hasRole("USER")
                 .and()

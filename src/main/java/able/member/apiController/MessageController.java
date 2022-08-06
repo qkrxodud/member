@@ -5,14 +5,13 @@ import able.member.entity.Authorization;
 import able.member.entity.MessageLog;
 import able.member.entity.StatusValue;
 import able.member.exhandler.exception.CMessageCheckFailedException;
-import able.member.exhandler.exception.CMessageSendFailedException;
-import able.member.exhandler.exception.CUserNotFoundException;
 import able.member.model.response.SingleResult;
 import able.member.service.AuthorizationService;
 import able.member.service.MessageLogService;
 import able.member.service.MessageService;
 import able.member.service.ResponseService;
 import able.member.utils.Util;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -21,11 +20,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.el.MethodNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-
+@Api(tags = "Message")
 @RestController
 @RequiredArgsConstructor
 public class MessageController {

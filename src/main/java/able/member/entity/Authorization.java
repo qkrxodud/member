@@ -1,5 +1,6 @@
 package able.member.entity;
 
+import able.member.exhandler.exception.CAuthorizationNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,5 +31,11 @@ public class Authorization {
 
     public void changePhoneCheckValue(StatusValue statusValue) {
         this.phoneCheck = statusValue;
+    }
+
+    public void checkStatusValue() {
+        if (this.phoneCheck == StatusValue.N) {
+            throw new CAuthorizationNotFoundException();
+        }
     }
 }

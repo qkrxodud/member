@@ -1,5 +1,6 @@
 package able.member.utils;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class Util {
     public static String createRandomNum() {
@@ -15,5 +16,12 @@ public class Util {
         sb.setLength(0);
 
         return randomNumber;
+    }
+
+    public static void checkPasswordValidation(String password) {
+        boolean matches = Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", password);
+        if (!matches) {
+            throw new IllegalArgumentException("비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.");
+        }
     }
 }
