@@ -1,6 +1,7 @@
 package able.member.service;
 
 import able.member.entity.MessageLog;
+import able.member.exhandler.exception.CMessageSendFailedException;
 import able.member.repository.MessageLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,19 +19,26 @@ public class MessageLogService {
         return messageLogRepository.save(authorization);
     }
 
+    public void validationCheck(String phoneNumber, MessageLog messageLog) {
+        // 하루 전송량 10회
+        checkSmsCount(phoneNumber);
+        // 3분 이내에 시간 체크
+        checkSmsDateTime(messageLog);
+    }
+
     public void checkSmsDateTime(MessageLog authorization) {
         LocalDateTime nowDateTime = LocalDateTime.now();
         LocalDateTime authorizationDateTime = authorization.getRegDate();
 
         if (ChronoUnit.MINUTES.between(authorizationDateTime, nowDateTime) < 3) {
-            throw new IllegalStateException("문자 재전송은 3분 이후에 가능합니다.");
+            throw new CMessageSendFailedException();
         }
     }
 
     public void checkSmsCount(String phoneNumber) {
         Optional<Integer> count = messageLogRepository.countMessageLogByPhoneNumber(phoneNumber);
         if (count.get()>9) {
-            throw new IllegalStateException("하루 한도 10회 인증을 초과하였습니다.");
+            throw new CMessageSendFailedException();
         }
     }
 

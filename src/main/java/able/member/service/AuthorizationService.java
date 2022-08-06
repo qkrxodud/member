@@ -2,12 +2,13 @@ package able.member.service;
 
 import able.member.entity.Authorization;
 import able.member.entity.StatusValue;
+import able.member.exhandler.exception.CAuthenticationEntryPointException;
+import able.member.exhandler.exception.CAuthorizationNotFoundException;
+import able.member.exhandler.exception.CUserNotFoundException;
 import able.member.repository.AuthorizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,19 +23,23 @@ public class AuthorizationService {
 
     @Transactional
     public Boolean checkRandomNumber(String phoneNum, String randomNum, String messageRandomNum) {
-        Authorization authorization = findByPhoneNumber(phoneNum)
-                .orElseThrow(() -> new IllegalStateException("핸드폰 번호를 확인해 주세요."));
-
+        Authorization authorization = findByPhoneNumber(phoneNum);
         if (messageRandomNum.equals(randomNum)) {
             authorization.changePhoneCheckValue(StatusValue.Y);
             return true;
         }
-
         return false;
     }
 
-    public Optional<Authorization> findByPhoneNumber(String phoneNum) {
-        return authorizationRepository.findByPhoneNumber(phoneNum);
+    public Authorization findByPhoneNumber(String phoneNum) {
+        return authorizationRepository.findByPhoneNumber(phoneNum)
+                .orElseThrow(CAuthorizationNotFoundException::new);
+    }
+
+    @Transactional
+    public void initAuthorization(String phoneNum) {
+        Authorization authorization = findByPhoneNumber(phoneNum);
+        authorization.changePhoneCheckValue(StatusValue.N);
     }
 
     public Boolean existsByPhoneNumber(String phoneNumber) {

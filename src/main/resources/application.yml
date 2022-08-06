@@ -26,4 +26,8 @@ logging:
     org.hibernate.SQL: debug
   #  org.hibernate.type: trace
 
+message:
+  apiKey: "NCS6Z3SFPMYI8UNC"
+  secret: "EI0LNFGTIZSUH3FI9DERT8TR6P8F5QNI"
+
 

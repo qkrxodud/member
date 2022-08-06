@@ -3,24 +3,26 @@ package able.member.apiController;
 import able.member.entity.Authorization;
 import able.member.entity.MessageLog;
 import able.member.entity.StatusValue;
+import able.member.exhandler.exception.CMessageCheckFailedException;
+import able.member.exhandler.exception.CMessageSendFailedException;
+import able.member.exhandler.exception.CUserNotFoundException;
+import able.member.model.response.SingleResult;
 import able.member.service.AuthorizationService;
 import able.member.service.MessageLogService;
 import able.member.service.MessageService;
-import able.member.utils.ResponseMessage;
+import able.member.service.ResponseService;
 import able.member.utils.Util;
 import lombok.RequiredArgsConstructor;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.el.MethodNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static able.member.utils.DefaultRes.createDefaultRes;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class MessageController {
 
     private final MessageLogService messageLogService;
     private final AuthorizationService authorizationService;
+    private final ResponseService responseService;
 
     @Value("${message.apiKey}")
     private String apiKey;
@@ -37,16 +40,13 @@ public class MessageController {
 
     // 메세지 전송
     @GetMapping("/send-message")
-    public ResponseEntity sendMessage(@RequestParam String phoneNumber) {
+    public SingleResult<String> sendMessage(@RequestParam String phoneNumber) {
         Optional<MessageLog> top1ByAuthorization = messageLogService.searchTop1ByPhoneNumber(phoneNumber);
+
+        //유호성 값 체크
         if (!top1ByAuthorization.isEmpty()) {
-            // 하루 전송량 10회
-            messageLogService.checkSmsCount(phoneNumber);
-            // 3분 이내에 시간 체크
-            messageLogService.checkSmsDateTime(top1ByAuthorization.get());
+            messageLogService.validationCheck(phoneNumber, top1ByAuthorization.get());
         }
-        //난수 생성
-        String randomNum = Util.createRandomNum();
 
         //회원 인증
         if (!authorizationService.existsByPhoneNumber(phoneNumber)) {
@@ -61,27 +61,35 @@ public class MessageController {
         //메세지 로그
         MessageLog messageLog = MessageLog.builder()
                 .phoneNumber(phoneNumber)
-                .random(randomNum)
+                .random(Util.createRandomNum())
                 .regDate(LocalDateTime.now())
                 .build();
         messageLogService.addMessageLog(messageLog);
 
         //메세지 전송
-        MessageService messageService = new MessageService(apiKey, apiSecret);
-        SingleMessageSentResponse singleMessageSentResponse = messageService.sendMessage(messageLog);
-
-        return new ResponseEntity<>(createDefaultRes(ResponseMessage.OK, "SUCCESS", singleMessageSentResponse.getStatusMessage()), HttpStatus.OK);
+        String statusMessage = new MessageService(apiKey, apiSecret).sendMessage(messageLog).getStatusMessage();
+        return responseService
+                .getSingleResult(statusMessage);
     }
 
     // 메세지 확인
-    @GetMapping("/check-message")
-    public ResponseEntity checkMessage(@RequestParam String phoneNum, @RequestParam String randomNum) {
+    @PutMapping("/check-message")
+    public SingleResult<Boolean> checkMessage(@RequestParam String phoneNum, @RequestParam String randomNum) {
         MessageLog messageLog = messageLogService.searchTop1ByPhoneNumber(phoneNum)
-                .orElseThrow(() -> new IllegalStateException("메세지가 발송되지 않았습니다. 잠시기다려주세요."));
-        System.out.println(messageLog.getRandom());
+                .orElseThrow(CMessageCheckFailedException::new);
 
-        Boolean result = authorizationService.checkRandomNumber(phoneNum, messageLog.getRandom(), randomNum);
+        authorizationService.findByPhoneNumber(phoneNum);
 
-        return new ResponseEntity<>(createDefaultRes(ResponseMessage.OK, "SUCCESS", result), HttpStatus.OK);
+        return responseService.getSingleResult(authorizationService.checkRandomNumber(phoneNum, messageLog.getRandom(), randomNum));
+    }
+
+    // 업데이트 메시지
+    @PutMapping("/update-message")
+    public SingleResult<String> update(@RequestParam String phone) {
+        authorizationService.initAuthorization(phone);
+
+        authorizationService.findByPhoneNumber(phone);
+
+        return sendMessage(phone);
     }
 }

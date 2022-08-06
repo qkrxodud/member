@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 이메일로 찾기
     Optional<User> findByMail(String mail);
+
+    // 이메일로 찾기
+    Optional<User> findByPhoneNumber(String phoneNum);
 }
