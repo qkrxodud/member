@@ -130,14 +130,14 @@ H2 데이터 베이스 설치 후 실행
 }
 ```
 ------
-### 이메일 로그인 request
+#### 이메일 로그인 request
 1. **Sign/Login** 클릭
 2. /login-email 클릭
 3. Try it out 클릭
 4. Parameters 입력
 5. Execute 클릭
 
-### 이메일 로그인 response
+#### 이메일 로그인 response
 ```json
 {
   "success": true,
@@ -159,14 +159,14 @@ H2 데이터 베이스 설치 후 실행
 }
 ```
 ------
-### 핸드폰 로그인 request
+#### 핸드폰 로그인 request
 1. **Sign/Login** 클릭
 2. /login-phone 클릭
 3. Try it out 클릭
 4. Parameters 입력
 5. Execute 클릭
 
-### 핸드폰 로그인 response
+#### 핸드폰 로그인 response
 ```json
 {
   "success": true,
@@ -188,14 +188,14 @@ H2 데이터 베이스 설치 후 실행
 }
 ```
 ------
-### 로그인 후 회원조회 request
+#### 로그인 후 회원조회 request
 1. **User 클릭**
 2. /api/findUser/{email} 클릭
 3. Try it out 클릭
 4. Parameters -> *로그인시 전달받은 X-AUTH-TOKEN 입력*, email 입력
 5. Execute 클릭
 
-### 로그인 후 회원조회 response
+#### 로그인 후 회원조회 response
 ```json
 {
   "success": true,
