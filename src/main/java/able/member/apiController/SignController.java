@@ -88,6 +88,9 @@ public class SignController {
         // 권환 확인
         authorization.checkStatusValue();
 
+        // 패스워드 유효성체크
+        Util.checkPasswordValidation(password);
+
         signService.update(mail, phone, password);
         return responseService.getSingleResult(new AuthorStatusResponseDto(authorization));
     }
