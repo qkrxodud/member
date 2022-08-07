@@ -1,4 +1,4 @@
-package abley.member.service;
+package ably.member.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

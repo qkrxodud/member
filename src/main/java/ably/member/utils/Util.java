@@ -1,4 +1,4 @@
-package abley.member.utils;
+package ably.member.utils;
 import java.util.Random;
 import java.util.regex.Pattern;
 

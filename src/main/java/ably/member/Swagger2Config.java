@@ -1,4 +1,4 @@
-package abley.member;
+package ably.member;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ public class Swagger2Config {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("abley.member"))
+                .apis(RequestHandlerSelectors.basePackage("ably.member"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

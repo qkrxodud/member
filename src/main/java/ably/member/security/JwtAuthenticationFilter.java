@@ -1,4 +1,4 @@
-package abley.member.security;
+package ably.member.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

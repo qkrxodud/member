@@ -1,4 +1,4 @@
-package abley.member;
+package ably.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.SpringApplication;

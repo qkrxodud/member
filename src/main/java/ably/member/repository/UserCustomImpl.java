@@ -1,7 +1,7 @@
-package abley.member.repository;
+package ably.member.repository;
 
-import abley.member.entity.QUser;
-import abley.member.entity.User;
+import ably.member.entity.QUser;
+import ably.member.entity.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Optional;
 
-import static abley.member.entity.QUser.*;
+import static ably.member.entity.QUser.*;
 
 @RequiredArgsConstructor
 public class UserCustomImpl implements UserCustom{

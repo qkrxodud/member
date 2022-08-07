@@ -1,7 +1,7 @@
-package abley.member.apiController.exception;
+package ably.member.apiController.exception;
 
-import abley.member.exhandler.exception.CAuthenticationEntryPointException;
-import abley.member.model.response.CommonResult;
+import ably.member.exhandler.exception.CAuthenticationEntryPointException;
+import ably.member.model.response.CommonResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,9 @@
-package abley.member.service;
+package ably.member.service;
 
-import abley.member.entity.MessageLog;
-import abley.member.exhandler.exception.CMessageSendCountOverException;
-import abley.member.exhandler.exception.CMessageSendTimeOverException;
-import abley.member.repository.MessageLogRepository;
+import ably.member.entity.MessageLog;
+import ably.member.exhandler.exception.CMessageSendCountOverException;
+import ably.member.exhandler.exception.CMessageSendTimeOverException;
+import ably.member.repository.MessageLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

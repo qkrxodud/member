@@ -1,6 +1,6 @@
-package abley.member.dto;
+package ably.member.dto;
 
-import abley.member.entity.User;
+import ably.member.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 

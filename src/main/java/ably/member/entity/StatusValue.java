@@ -1,4 +1,4 @@
-package abley.member.entity;
+package ably.member.entity;
 
 public enum StatusValue {
     Y, N

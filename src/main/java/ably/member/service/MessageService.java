@@ -1,6 +1,6 @@
-package abley.member.service;
+package ably.member.service;
 
-import abley.member.entity.MessageLog;
+import ably.member.entity.MessageLog;
 import lombok.Setter;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;

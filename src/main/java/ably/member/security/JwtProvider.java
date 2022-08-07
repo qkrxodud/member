@@ -1,6 +1,6 @@
-package abley.member.security;
+package ably.member.security;
 
-import abley.member.service.CustomUserDetailsService;
+import ably.member.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

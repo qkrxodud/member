@@ -1,4 +1,4 @@
-package abley.member.model.response;
+package ably.member.model.response;
 
 import lombok.Getter;
 import lombok.Setter;

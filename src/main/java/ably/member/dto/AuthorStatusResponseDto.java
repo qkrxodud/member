@@ -1,7 +1,7 @@
-package abley.member.dto;
+package ably.member.dto;
 
-import abley.member.entity.Authorization;
-import abley.member.entity.StatusValue;
+import ably.member.entity.Authorization;
+import ably.member.entity.StatusValue;
 import lombok.Getter;
 
 @Getter

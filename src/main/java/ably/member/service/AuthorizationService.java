@@ -1,10 +1,10 @@
-package abley.member.service;
+package ably.member.service;
 
-import abley.member.entity.Authorization;
-import abley.member.entity.StatusValue;
-import abley.member.exhandler.exception.CAuthorizationNotFoundException;
-import abley.member.exhandler.exception.CMessageCheckFailedException;
-import abley.member.repository.AuthorizationRepository;
+import ably.member.entity.Authorization;
+import ably.member.entity.StatusValue;
+import ably.member.exhandler.exception.CAuthorizationNotFoundException;
+import ably.member.exhandler.exception.CMessageCheckFailedException;
+import ably.member.repository.AuthorizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package abley.member.dto;
+package ably.member.dto;
 
 import lombok.Getter;
 

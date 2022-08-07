@@ -1,4 +1,4 @@
-package abley.member.model.response;
+package ably.member.model.response;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

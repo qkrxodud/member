@@ -1,6 +1,6 @@
-package abley.member.repository;
+package ably.member.repository;
 
-import abley.member.entity.MessageLog;
+import ably.member.entity.MessageLog;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
-import static abley.member.entity.QMessageLog.*;
+import static ably.member.entity.QMessageLog.*;
 
 @RequiredArgsConstructor
 public class MessageLogCustomImpl implements MessageLogCustom {

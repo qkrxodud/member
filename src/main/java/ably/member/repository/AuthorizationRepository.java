@@ -1,6 +1,6 @@
-package abley.member.repository;
+package ably.member.repository;
 
-import abley.member.entity.Authorization;
+import ably.member.entity.Authorization;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

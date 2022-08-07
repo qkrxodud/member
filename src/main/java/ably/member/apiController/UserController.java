@@ -1,10 +1,10 @@
-package abley.member.apiController;
+package ably.member.apiController;
 
-import abley.member.dto.UserDtoResponse;
-import abley.member.entity.User;
-import abley.member.model.response.SingleResult;
-import abley.member.service.ResponseService;
-import abley.member.service.UserService;
+import ably.member.dto.UserDtoResponse;
+import ably.member.entity.User;
+import ably.member.model.response.SingleResult;
+import ably.member.service.ResponseService;
+import ably.member.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

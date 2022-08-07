@@ -1,6 +1,6 @@
-package abley.member.entity;
+package ably.member.entity;
 
-import abley.member.exhandler.exception.CAuthorizationNotFoundException;
+import ably.member.exhandler.exception.CAuthorizationNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

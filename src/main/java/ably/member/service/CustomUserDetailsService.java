@@ -1,7 +1,7 @@
-package abley.member.service;
+package ably.member.service;
 
-import abley.member.exhandler.exception.CUserNotFoundException;
-import abley.member.repository.UserRepository;
+import ably.member.exhandler.exception.CUserNotFoundException;
+import ably.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

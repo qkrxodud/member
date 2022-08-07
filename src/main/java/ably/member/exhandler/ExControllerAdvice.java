@@ -1,8 +1,8 @@
-package abley.member.exhandler;
+package ably.member.exhandler;
 
-import abley.member.exhandler.exception.*;
-import abley.member.model.response.CommonResult;
-import abley.member.service.ResponseService;
+import ably.member.exhandler.exception.*;
+import ably.member.model.response.CommonResult;
+import ably.member.service.ResponseService;
 import jdk.jshell.spi.ExecutionControl.UserException;
 import lombok.AllArgsConstructor;
 import lombok.Data;

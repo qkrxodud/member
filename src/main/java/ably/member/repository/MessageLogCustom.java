@@ -1,6 +1,6 @@
-package abley.member.repository;
+package ably.member.repository;
 
-import abley.member.entity.MessageLog;
+import ably.member.entity.MessageLog;
 
 import java.util.Optional;
 

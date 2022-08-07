@@ -1,4 +1,4 @@
-package abley.member.service;
+package ably.member.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

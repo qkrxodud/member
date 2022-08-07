@@ -1,4 +1,4 @@
-package abley.member.exhandler.exception;
+package ably.member.exhandler.exception;
 
 public class CPhoneLoginFailedException extends RuntimeException {
 

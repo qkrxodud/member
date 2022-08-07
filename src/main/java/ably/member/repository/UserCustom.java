@@ -1,6 +1,6 @@
-package abley.member.repository;
+package ably.member.repository;
 
-import abley.member.entity.User;
+import ably.member.entity.User;
 
 import java.util.Optional;
 

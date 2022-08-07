@@ -1,8 +1,8 @@
-package abley.member.service;
+package ably.member.service;
 
-import abley.member.model.response.CommonResult;
-import abley.member.model.response.ListResult;
-import abley.member.model.response.SingleResult;
+import ably.member.model.response.CommonResult;
+import ably.member.model.response.ListResult;
+import ably.member.model.response.SingleResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
