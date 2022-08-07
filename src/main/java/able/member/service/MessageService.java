@@ -27,7 +27,7 @@ public class MessageService {
         message.setText("본인확인\n인증번호("+messageLog.getRandom()+")입력\n시 정상처리 됩니다.");
         try {
             //TODO 풀어줘야 작동한다. 현재는 테스트
-            //response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+            response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         } catch (Exception e) {
             e.printStackTrace();
         }

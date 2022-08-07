@@ -2,7 +2,6 @@ package able.member.service;
 
 import able.member.entity.MessageLog;
 import able.member.exhandler.exception.CMessageSendCountOverException;
-import able.member.exhandler.exception.CMessageSendFailedException;
 import able.member.exhandler.exception.CMessageSendTimeOverException;
 import able.member.repository.MessageLogRepository;
 import lombok.RequiredArgsConstructor;
