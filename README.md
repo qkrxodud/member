@@ -28,7 +28,7 @@
 * Git, JAVA는 설치되었다고 가정
 ```
 $ git clone https://github.com/qkrxodud/member.git
-$ cd able
+$ cd abley
 $ ./gradlew clean build
 $ java -jar build/libs/member-0.0.1-SNAPSHOT.jar
 ```
