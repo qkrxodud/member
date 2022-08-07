@@ -52,7 +52,7 @@ H2 데이터 베이스 설치 후 실행
   * 전화번호 인증 후 비밀번호 재설정이 가능해야 합니다.
 ---
 
-## 리뷰 작성 방법
+## 작성 방법
 ### swagger 실행링크 : <http://localhost:8080/swagger-ui.html>
 #### 회원인증 랜덤 번호 전송 request
 1. message-controller 클릭
