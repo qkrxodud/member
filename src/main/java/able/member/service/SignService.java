@@ -48,8 +48,8 @@ public class SignService {
 
     // 회원 정보 업데이트
     @Transactional
-    public void update(String phoneNum, String password) {
-        User user = userRepository.findByPhoneNumber(phoneNum)
+    public void update(String mail, String phoneNum, String password) {
+        User user = userRepository.findByMailAndPhoneNumber(mail, phoneNum)
                 .orElseThrow(CUserNotFoundException::new);
 
         user.changePassword(passwordEncoder.encode(password));

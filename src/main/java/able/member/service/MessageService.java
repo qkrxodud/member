@@ -18,6 +18,7 @@ public class MessageService {
         this.messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
     }
 
+    // 메시지 전송
     public SingleMessageSentResponse sendMessage(MessageLog messageLog) {
         SingleMessageSentResponse response = null;
         Message message = new Message();

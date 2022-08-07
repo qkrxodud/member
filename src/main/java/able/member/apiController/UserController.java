@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +36,10 @@ public class UserController {
     @ApiOperation(value = "회원 검색 (메일)", notes = "이메일로 회원을 검색합니다.")
     @GetMapping("/api/findUser/{mail}")
     public SingleResult<UserDtoResponse> findUserByMail(@PathVariable String mail) {
-        User userByMail = userService.findUserByMail(mail);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User principal = (User)authentication.getPrincipal();
+
+        User userByMail = userService.findUserByUserNoAndMail(principal.getUserNo(), mail);
         return responseService.getSingleResult(new UserDtoResponse(userByMail));
     }
 

@@ -4,13 +4,13 @@ import able.member.dto.AuthorStatusResponseDto;
 import able.member.dto.UserLoginResponseDto;
 import able.member.dto.UserSignResponseDto;
 import able.member.entity.Authorization;
-import able.member.entity.StatusValue;
 import able.member.entity.User;
 import able.member.model.response.SingleResult;
 import able.member.security.JwtProvider;
 import able.member.service.AuthorizationService;
 import able.member.service.ResponseService;
 import able.member.service.SignService;
+import able.member.service.UserService;
 import able.member.utils.Util;
 import io.swagger.annotations.Api;
 import lombok.Data;
@@ -32,6 +32,7 @@ public class SignController {
     private final PasswordEncoder passwordEncoder;
     private final AuthorizationService authorizationService;
     private final ResponseService responseService;
+    private final UserService userService;
 
     // 이메일 로그인
     @GetMapping("/login-email")
@@ -54,7 +55,10 @@ public class SignController {
     // 회원가입
     @PostMapping("/signup")
     public SingleResult<UserSignResponseDto> saveUser(@RequestBody @Valid CreateUserRequest request) {
-        Authorization authorization = authorizationService.findByPhoneNumber(request.getPhoneNumber());
+        Authorization authorization = authorizationService.findByMailAndPhoneNumber(request.getMail(), request.getPhoneNumber());
+        // 회원이 있는지 확인한다.
+        userService.validateDuplicateMember(request.mail, request.phoneNumber);
+
 
         // 권환 확인
         authorization.checkStatusValue();
@@ -78,13 +82,13 @@ public class SignController {
 
     // 비밀번호 업데이트
     @PutMapping("/user")
-    public SingleResult<AuthorStatusResponseDto> update(@RequestParam String phone, @RequestParam String password) {
-        Authorization authorization = authorizationService.findByPhoneNumber(phone);
+    public SingleResult<AuthorStatusResponseDto> update(@RequestParam String mail, @RequestParam String phone, @RequestParam String password) {
+        Authorization authorization = authorizationService.findByMailAndPhoneNumber(mail, phone);
 
         // 권환 확인
         authorization.checkStatusValue();
 
-        signService.update(phone, password);
+        signService.update(mail, phone, password);
         return responseService.getSingleResult(new AuthorStatusResponseDto(authorization));
     }
 

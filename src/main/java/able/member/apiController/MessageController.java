@@ -14,7 +14,6 @@ import able.member.utils.Util;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +39,7 @@ public class MessageController {
 
     // 메세지 전송
     @GetMapping("/send-message")
-    public SingleResult<MessageResponseDto> sendMessage(@RequestParam String phoneNumber) {
+    public SingleResult<MessageResponseDto> sendMessage(@RequestParam String mail, @RequestParam String phoneNumber) {
         Optional<MessageLog> top1ByAuthorization = messageLogService.searchTop1ByPhoneNumber(phoneNumber);
 
         //유호성 값 체크
@@ -51,6 +50,7 @@ public class MessageController {
         //회원 인증
         if (!authorizationService.existsByPhoneNumber(phoneNumber)) {
             Authorization authorization = Authorization.builder()
+                    .mail(mail)
                     .phoneNumber(phoneNumber)
                     .phoneCheck(StatusValue.N)
                     .build();
@@ -75,28 +75,35 @@ public class MessageController {
 
     // 메세지 확인
     @PutMapping("/check-message")
-    public SingleResult<MessageResponseDto> checkMessage(@RequestParam String phoneNum, @RequestParam String randomNum) {
+    public SingleResult<MessageResponseDto> checkMessage(@RequestParam String mail, @RequestParam String phoneNum, @RequestParam String randomNum) {
         MessageLog messageLog = messageLogService.searchTop1ByPhoneNumber(phoneNum)
                 .orElseThrow(CMessageCheckFailedException::new);
 
-        authorizationService.findByPhoneNumber(phoneNum);
-        Boolean checkAuth = authorizationService.checkRandomNumber(phoneNum, messageLog.getRandom(), randomNum);
-        HttpStatus result;
-        if (checkAuth) {
-            result = HttpStatus.OK;
-        } else {
-            result = HttpStatus.PRECONDITION_FAILED;
-        }
+        authorizationService.findByMailAndPhoneNumber(mail, phoneNum); // SMS 인증이 되지 않았습니다.
+        Boolean checkAuth = authorizationService.checkRandomNumber(mail, phoneNum, messageLog.getRandom(), randomNum);
 
-        return responseService.getSingleResult(new MessageResponseDto(phoneNum, result.toString()));
+        return responseService.getSingleResult(new MessageResponseDto(phoneNum, checkAuth.toString()));
     }
 
     // 업데이트 메시지
-    @PutMapping("/update-message")
-    public SingleResult<MessageResponseDto> update(@RequestParam String phone) {
-        authorizationService.initAuthorization(phone);
-        authorizationService.findByPhoneNumber(phone);
+    @PutMapping("/send-update-message")
+    public SingleResult<MessageResponseDto> sendUpdateMessage(@RequestParam String mail, @RequestParam String phone) {
+        authorizationService.initAuthorization(mail, phone);
+        authorizationService.findByMailAndPhoneNumber(mail, phone);  // SMS 인증이 되지 않았습니다.
 
-        return sendMessage(phone);
+        return sendMessage(mail, phone);
+    }
+
+    // 업데이트 메시지 확인
+    @PutMapping("/check-update-message")
+    public SingleResult<MessageResponseDto> checkUpdateMessage(@RequestParam String mail, @RequestParam String phoneNum, @RequestParam String randomNum) {
+        MessageLog messageLog = messageLogService.searchTop1ByPhoneNumber(phoneNum)
+                .orElseThrow(CMessageCheckFailedException::new);
+
+        authorizationService.findByMailAndPhoneNumber(mail, phoneNum); // SMS 인증이 되지 않았습니다.
+        Boolean checkAuth = authorizationService.checkRandomNumber(mail, phoneNum, messageLog.getRandom(), randomNum);
+
+
+        return responseService.getSingleResult(new MessageResponseDto(phoneNum, checkAuth.toString()));
     }
 }

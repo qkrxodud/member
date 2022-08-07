@@ -4,6 +4,7 @@ import able.member.entity.Authorization;
 import able.member.entity.StatusValue;
 import able.member.exhandler.exception.CAuthenticationEntryPointException;
 import able.member.exhandler.exception.CAuthorizationNotFoundException;
+import able.member.exhandler.exception.CMessageCheckFailedException;
 import able.member.exhandler.exception.CUserNotFoundException;
 import able.member.repository.AuthorizationRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +23,23 @@ public class AuthorizationService {
     }
 
     @Transactional
-    public Boolean checkRandomNumber(String phoneNum, String randomNum, String messageRandomNum) {
-        Authorization authorization = findByPhoneNumber(phoneNum);
+    public Boolean checkRandomNumber(String mail, String phoneNum, String randomNum, String messageRandomNum) {
+        Authorization authorization = findByMailAndPhoneNumber(mail, phoneNum);
         if (messageRandomNum.equals(randomNum)) {
             authorization.changePhoneCheckValue(StatusValue.Y);
             return true;
         }
-        return false;
+        throw new CMessageCheckFailedException();
     }
 
-    public Authorization findByPhoneNumber(String phoneNum) {
-        return authorizationRepository.findByPhoneNumber(phoneNum)
+    public Authorization findByMailAndPhoneNumber(String mail, String phoneNum) {
+        return authorizationRepository.findByMailAndPhoneNumber(mail, phoneNum)
                 .orElseThrow(CAuthorizationNotFoundException::new);
     }
 
     @Transactional
-    public void initAuthorization(String phoneNum) {
-        Authorization authorization = findByPhoneNumber(phoneNum);
+    public void initAuthorization(String mail, String phoneNum) {
+        Authorization authorization = findByMailAndPhoneNumber(mail, phoneNum);  //등록된 회원이 없습니다.
         authorization.changePhoneCheckValue(StatusValue.N);
     }
 
