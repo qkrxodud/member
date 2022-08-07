@@ -55,13 +55,13 @@ H2 데이터 베이스 설치 후 실행
 ## API 작성 방법
 ### swagger 실행링크 : <http://localhost:8080/swagger-ui.html>
 #### 회원인증 랜덤 번호 전송 request
-1. ### message 클릭
+1. **message** 클릭
 2. /send-message 클릭
 3. Try it out 클릭
-4. Parameters -> 핸드폰 입력
+4. Parameters 입력
 5. Execute 클릭
 
-#### 회원인증 랜덤 번호 전송 response
+#### 회원가입 SMS 랜덤 번호 전송 response
 ```json
 {
   "success": true,
@@ -76,10 +76,10 @@ H2 데이터 베이스 설치 후 실행
 ---
 
 #### 회원인증 request
-1. message-controller 클릭
+1. **message** 클릭
 2. /check-message 클릭
 3. Try it out 클릭
-4. Parameters -> 핸드폰 입력, SMS 랜덤번호 작성
+4. Parameters 입력
 5. Execute 클릭
 #### 회원인증 response
 ```json
@@ -95,7 +95,7 @@ H2 데이터 베이스 설치 후 실행
 ```
 ------
 #### 회원가입 request
-1. Sign/Login 클릭
+1. **Sign/Login** 클릭
 2. /signup 클릭
 3. Try it out 클릭
 4. Example value 작성
@@ -131,10 +131,10 @@ H2 데이터 베이스 설치 후 실행
 ```
 ------
 ### 이메일 로그인 request
-1. Sign/Login 클릭
+1. **Sign/Login** 클릭
 2. /login-email 클릭
 3. Try it out 클릭
-4. Parameters -> 이메일, 패스워드작성
+4. Parameters 입력
 5. Execute 클릭
 
 ### 이메일 로그인 response
@@ -160,10 +160,10 @@ H2 데이터 베이스 설치 후 실행
 ```
 ------
 ### 핸드폰 로그인 request
-1. Sign/Login 클릭
+1. **Sign/Login** 클릭
 2. /login-phone 클릭
 3. Try it out 클릭
-4. Parameters -> 핸드폰, 패스워드작성
+4. Parameters 입력
 5. Execute 클릭
 
 ### 핸드폰 로그인 response
@@ -189,10 +189,10 @@ H2 데이터 베이스 설치 후 실행
 ```
 ------
 ### 로그인 후 회원조회 request
-1. User 클릭
+1. **User 클릭**
 2. /api/findUser/{email} 클릭
 3. Try it out 클릭
-4. Parameters -> 로그인시 전달받은 X-AUTH-TOKEN 입력, email 입력
+4. Parameters -> *로그인시 전달받은 X-AUTH-TOKEN 입력*, email 입력
 5. Execute 클릭
 
 ### 로그인 후 회원조회 response
@@ -218,14 +218,14 @@ H2 데이터 베이스 설치 후 실행
 }
 ```
 ------
-#### 비로그인 핸드폰인증 request
-1. message-controller 클릭
-2. /update-message 클릭
+#### 비로그인 랜덤 번호 전송 request
+1. **message** 클릭
+2. /send-update-message 클릭
 3. Try it out 클릭
-4. Parameters -> 핸드폰 입력
+4. Parameters -> 입력
 5. Execute 클릭
 
-#### 비로그인 핸드폰인증 response
+#### 비밀번호 변경 SMS 전송 response
 ```json
 {
   "success": true,
@@ -237,5 +237,44 @@ H2 데이터 베이스 설치 후 실행
   }
 }
 ```
-
 ---
+#### 비밀번호 변경 인증  request
+1. **message** 클릭
+2. /check-update-message 클릭
+3. Try it out 클릭
+4. Parameters -> 입력
+5. Execute 클릭
+
+#### 비밀번호 변경 인증 response
+```json
+{
+  "success": true,
+  "code": 0,
+  "msg": "성공하였습니다.",
+  "data": {
+    "phoneNum": "01034047799",
+    "successMsg": "200 OK"
+  }
+}
+```
+---
+#### 비밀번호 변경  request
+1. **Sign/Login** 클릭
+2. /user 클릭
+3. Try it out 클릭
+4. Parameters -> 입력
+5. Execute 클릭
+
+#### 비밀번호 변경 인증 response
+```json
+{
+  "success": true,
+  "code": 0,
+  "msg": "성공하였습니다.",
+  "data": {
+    "mail": "qkrxodud00@gmail.com",
+    "phoneNum": "01034047799",
+    "statusValue": "Y"
+  }
+}
+```
