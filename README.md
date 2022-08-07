@@ -30,7 +30,7 @@
 $ git clone https://github.com/qkrxodud/member.git
 $ cd able
 $ ./gradlew clean build
-$ java -jar build/libs/review-0.0.1-SNAPSHOT.jar
+$ java -jar build/libs/member-0.0.1-SNAPSHOT.jar
 ```
 ---
 ## 데이터 베이스 설정
